@@ -1,20 +1,29 @@
-from advent.utils import parse_common_args, load_text
+from advent.utils import parse_common_args, load_lines
 
 def load_input(path: str, debug: bool = False) -> list[str]:
-    # Read the full file as a single string using the shared helper
-    text = load_text(path, debug=debug)
+    return load_lines(path, debug=debug)
 
-    # TODO: Parse the input text into a list of tuples (left, right)
-    return text
-
-
-def run_logic(data: list[tuple[int, int]], task: int, debug: bool = False) -> int:
+def run_logic(data: list[str], task: int, debug: bool = False) -> int:
     result = 0
+    
+    for entry in data:
+        entry = entry.strip()
+        match task:
+            case 1:
+                result += max_pair_value(entry)
+            case 2:
+                raise NotImplementedError("Task 2 not implemented yet")
+    return result
 
-    # TODO: Implement the main logic based on the task number
-
-    # Return the final result
-    return int(result)
+def max_pair_value(line: str) -> int:
+    max_value = -1
+    length = len(line)
+    for i in range(length):
+        for j in range(i + 1, length):
+            pair_value = 10 * int(line[i]) + int(line[j])
+            if pair_value > max_value:
+                max_value = pair_value
+    return max_value
          
 def main():
     # Parse command-line arguments

@@ -1,6 +1,6 @@
 from advent.utils import parse_common_args, load_lines
 
-def load_input(path: str, debug: bool = False) -> list[tuple[int, int]]:
+def load_input(path: str, debug: bool = False) -> list[str]:
     return load_lines(path, debug=debug)
 
 def run_logic(data: list[str], default: int, task: int, debug: bool = False) -> int:
