@@ -1,43 +1,9 @@
-import argparse
-from pathlib import Path
+from advent.utils import parse_common_args, load_lines
 
-def parse_args():
-    # Set up argument parser
-    parser = argparse.ArgumentParser()
+def load_input(path: str, debug: bool = False) -> list[tuple[int, int]]:
+    return load_lines(path, debug=debug)
 
-    # Debug flag
-    parser.add_argument("-d", "--debug", action="store_true", help="Enable debug mode")
-
-    # Task must be 1 or 2
-    parser.add_argument("task", type=int, choices=[1, 2], help="Task number (1 or 2)")
-
-    # Input file path
-    parser.add_argument("input_file", help="Path to input data file")
-
-    return parser.parse_args()
-
-def load_input(path: str, debug: bool = False) -> list[str]:
-    # Load input data from the specified file
-    input_path = Path(path)
-
-    # Debug information
-    if debug:
-        print(f"[DEBUG] Reading input from: {input_path.resolve()}")
-
-    # Read lines from the file
-    with input_path.open("r", encoding="utf-8") as file:
-        lines = [line.rstrip("\n") for line in file]
-
-    # More debug information
-    if debug:
-        print(f"[DEBUG] First 3 lines: {lines[:3]}")
-        print(f"[DEBUG] Loaded {len(lines)} lines")
-
-    # Return the list of lines
-    return lines
-
-
-def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
+def run_logic(data: list[str], default: int, task: int, debug: bool = False) -> int:
     result = 0
     currentValve = default
 
@@ -55,7 +21,7 @@ def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
         try:
             value = int(value_str)
         except ValueError:
-            if args.debug:
+            if debug:
                 print(f"[DEBUG] Skipping invalid entry: {entry}")
             continue
 
@@ -68,7 +34,7 @@ def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
                 sign = -1
                 base = currentValve % 100
             case _:
-                if args.debug:
+                if debug:
                     print(f"[DEBUG] direction not recognized: {direction}")
                 continue
 
@@ -82,7 +48,7 @@ def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
             crossings = 1 + (value - first_step) // 100
 
         # Debug per move
-        if args.debug:
+        if debug:
             print(f"[DEBUG] start={currentValve}, dir={direction}, value={value}, "
                   f"first_step={first_step}, crossings={crossings}")
 
@@ -90,7 +56,7 @@ def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
         currentValve = (currentValve + sign * value) % 100
 
         # Update result based on task
-        match args.task:
+        match task:
             case 1:
                 # Part 1: count only when we END on 0
                 if currentValve == 0:
@@ -102,19 +68,21 @@ def run_logic(data: list[str], default: int, args: argparse.Namespace) -> int:
     # Return the final result
     return int(result)
 
-
 def main():
     # Parse command-line arguments
-    args = parse_args()
-    print(f"debug={args.debug}, task={args.task}, file={args.input_file}")
-
+    args = parse_common_args()
+    
     # Load input data
     lines = load_input(args.input_file, debug=args.debug)
-
+    
     # Run the main logic
-    result = run_logic(lines, default=50, args=args)
+    result = run_logic(lines, task=args.task, default=50 )
     print(f"Result: {result}")
-
 
 if __name__ == "__main__":
     main()
+
+def main():
+    args = parse_common_args()
+
+  
