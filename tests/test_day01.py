@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 from advent.day01 import load_input, run_logic

@@ -24,26 +24,42 @@ def load_input(path: str, debug: bool = False) -> list[tuple[int, int]]:
 def run_logic(data: list[tuple[int, int]], task: int, debug: bool = False) -> int:
     result = 0
 
+    # Iterate through each range and check for invalid IDs
     for left, right in data:
-        sequence = set(range(left, right + 1))
-
-        for value in sequence:
-            value_str = str(value)  
-            size = len(value_str)
-            halfsize = int(size / 2)
-
-            if size % 2 != 0:
-                continue  # cannot be repeated pattern
-            
-            lhs = value_str[0:halfsize]
-            rhs = value_str[halfsize:size]
-
-            if lhs == rhs:
+        for value in range(left, right + 1):
+            if is_invalid_id(value, task= task):
                 result += value
 
     # Return the final result
     return int(result)
 
+def is_invalid_id(value: int, task: int) -> bool:
+    value_str = str(value)
+    size = len(value_str)
+
+    # Task 1: exactly two halves equal
+    if task == 1:
+        if size % 2 != 0:
+            return False
+        return ( value_str[:size // 2] == value_str[size // 2:] )
+
+    # Task 2: repeating blocks
+    if task == 2:
+        # Try all possible block sizes betwen 1 and half the length
+        max_block_size = size // 2
+        for block_size in range(1, max_block_size + 1):
+            # Block size must divide the full length exactly
+            if size % block_size != 0:
+                continue
+
+            # Construct the candidate by repeating the block for the full length
+            block = value_str[:block_size]
+            candidate = block * (size // block_size)
+
+            # Check if it matches the original value
+            if candidate == value_str:
+                return True
+    return False
 
 def main():
     # Parse command-line arguments

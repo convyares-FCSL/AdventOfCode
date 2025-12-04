@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 from advent.day02 import load_input, run_logic
@@ -14,6 +13,5 @@ def test_example_input_task_1():
 def test_example_input_task_2():
     data = load_input(path= str(DATA_DIR / "day02.txt"))
     result = run_logic(data, task= 2)
-    
-     # TODO: replace this with the real expected value once part 2 is done
-    assert True
+
+    assert result == 4174379265
