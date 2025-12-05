@@ -14,5 +14,4 @@ def test_example_input_task_2():
     data = load_input(path= str(DATA_DIR / "day05.txt"))
     result = run_logic(data, task= 2)
 
-    # TODO: Replace with the actual expected result
-    assert True
+    assert result ==  14

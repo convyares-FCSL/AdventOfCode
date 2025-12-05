@@ -42,7 +42,6 @@ def load_lines(path: str, debug: bool = False) -> list[str]:
     lines = [line.rstrip("\n") for line in text.splitlines()]
 
     if debug:
-        print(f"[DEBUG] First 3 lines: {lines[:3]}")
         print(f"[DEBUG] Loaded {len(lines)} lines")
 
     return lines
